@@ -1,0 +1,11 @@
+body {
+    margin: 0;
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    user-select: none;
+}
+
+skill-top {
+    margin: 5px;
+}
