@@ -1,4 +1,4 @@
-import {skill_top_service} from "../services/skill-top-service.js";
+import { skill_top_service } from "../services/skill-top-service.js";
 
 const template =
 `
@@ -7,7 +7,7 @@ const template =
         position: relative;
         width: 200px;
         height: 100px;
-        border: maroon solid 2px;
+        border: #800000 solid 2px;
         border-radius: 6px;
         display: flex;
         flex-direction: column;
@@ -20,7 +20,7 @@ const template =
         justify-content: space-between;
         padding: 0 50px 0 10px;
     }
-    
+
     .top1 {
         background-color: #800000;
         color: #f5deb3;
@@ -47,13 +47,19 @@ const template =
         border-radius: 6px;
         cursor: pointer;
         transform: rotate(-90deg);
-        background-color: #f00;
         color: #fff;
+        background-color: #777;
         opacity: .8;
     }
     #close:hover {
         opacity: 1;
     }
+    #close.red { background-color: #f00; }
+    #close.green { background-color: #0f0; }
+    #close.blue { background-color: #00f; }
+    #close.cyan { background-color: #0ff; }
+    #close.magenta { background-color: #f0f; }
+    #close.orange { background-color: #f70; }
 </style>
 <div class="top1">
     <div id="top1-name"></div>
@@ -74,6 +80,10 @@ const element = (name, skill) => {
 
 export class SkillTop extends HTMLElement
 {
+    static get observedAttributes() {
+        return ['color'];
+    }
+
     constructor()
     {
         super();
@@ -104,17 +114,25 @@ export class SkillTop extends HTMLElement
         this.top1_name = this.shadow_root.querySelector('#top1-name');
         this.top1_skill = this.shadow_root.querySelector('#top1-skill');
         this.other = this.shadow_root.querySelector('#other');
+        this.close = this.shadow_root.querySelector('#close');
 
         this.observer(skill_top_service.init());
         this.obs_id = skill_top_service.add_obs(this.observer.bind(this));
 
-        this.shadow_root.querySelector('#close')
-            .addEventListener('click', e => {
-                e.preventDefault();
-                e.stopPropagation();
+        if (this.close_color) this.close.className = this.close_color;
 
-                this.parentNode.removeChild(this);
-            });
+        this.close.addEventListener('click', e => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            this.parentNode.removeChild(this);
+        });
+    }
+
+    attributeChangedCallback(name, oldValue, newValue)
+    {
+        if (this.close) this.close.className = newValue;
+        else this.close_color = newValue;
     }
 
     disconnectedCallback()
