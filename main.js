@@ -16,6 +16,10 @@ const color = () => {
 };
 
 document.addEventListener('click', () => {
+    const plates = document.getElementsByTagName('skill-top');
+
+    if (plates.length >= 10) return;
+
     const el = document.createElement('skill-top');
 
     el.setAttribute('color', color());
