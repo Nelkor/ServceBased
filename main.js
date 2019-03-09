@@ -12,7 +12,7 @@ const color = () => {
         'orange',
     ];
 
-    return variants[Math.round(Math.random() * variants.length)];
+    return variants[Math.floor(Math.random() * variants.length)];
 };
 
 document.addEventListener('click', () => {
